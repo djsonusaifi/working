@@ -14,7 +14,7 @@
         :root {
             --green: #22C55E;
             --brand-red: #DC2626;
-            --color-background: #ffffff;
+            --color-background: #f0fff4;
             --color-text-primary: #4b5563; /* text-gray-800 */
         }
         body {
@@ -164,6 +164,20 @@
             to {
                 opacity: 1;
                 transform: scale(1);
+            }
+        }
+        header {
+            animation: slideInDown 1s ease-in-out;
+        }
+
+        @keyframes slideInDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
             }
         }
     </style>
@@ -391,7 +405,7 @@
                 <button id="close-dev-modal-button" class="text-2xl">&times;</button>
             </div>
             <div class="text-center">
-                <img src="https://github.com/djsonusaifi/working/blob/main/sonu.jpeg?raw=true" alt="sonu.jpeg" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-green-500">
+                <img src="sonu.jpeg" alt="sonu.jpeg" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-green-500">
                 <h3 class="text-2xl font-bold text-gray-800">Md Sonu Saifi</h3>
                 <p class="text-gray-500">Full Stack Developer</p>
                 <div class="space-y-4 text-left text-blue-600 mt-6">
