@@ -202,7 +202,6 @@
                 <a href="#book-now" class="text-gray-600 hover:text-green" data-lang="book_now"><span class="emoji">📅</span> Book Now</a>
                 <a href="#join-us" class="text-gray-600 hover:text-green" data-lang="join_us"><span class="emoji">🤝</span> Join Us</a>
                 <a href="#contact" class="text-gray-600 hover:text-green" data-lang="contact"><span class="emoji">📞</span> Contact</a>
-                <a href="login.html" id="login-button" class="text-gray-600 hover:text-green" data-lang="login"><span class="emoji">👤</span> Login</a>
                 <button id="open-download-modal-button" class="bg-green text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:opacity-90 transition-colors" data-lang="download_app">Download App</button>
                 <div class="flex items-center space-x-2">
                     <a href="#" class="text-sm font-medium text-gray-500 hover:text-green lang-button" data-lang-id="en">EN</a>
@@ -221,7 +220,6 @@
             <a href="#book-now" class="block py-2 text-gray-600 hover:text-green" data-lang="book_now"><span class="emoji">📅</span> Book Now</a>
             <a href="#join-us" class="block py-2 text-gray-600 hover:text-green" data-lang="join_us"><span class="emoji">🤝</span> Join Us</a>
             <a href="#contact" class="block py-2 text-gray-600 hover:text-green" data-lang="contact"><span class="emoji">📞</span> Contact</a>
-            <a href="login.html" id="mobile-login-button" class="block py-2 text-gray-600 hover:text-green" data-lang="login"><span class="emoji">👤</span> Login</a>
             <button id="mobile-open-download-modal-button" class="w-full mt-4 bg-green text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:opacity-90 transition-colors" data-lang="download_app">Download App</button>
             <div class="flex items-center space-x-2 mt-4">
                 <a href="#" class="text-sm font-medium text-gray-500 hover:text-green lang-button" data-lang-id="en">EN</a>
@@ -288,6 +286,59 @@
                         <button class="open-modal-button bg-green text-white py-2 px-4 rounded-lg hover:opacity-90 transition-opacity mt-auto">Book Now</button>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <!-- Maid Service Requirements Section -->
+        <section id="maid-requirements" class="bg-white py-20">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center mb-12" data-lang="maid_requirements_title">Maid Service Requirements</h2>
+                <form id="maid-requirements-form" class="max-w-2xl mx-auto bg-gray-50 p-8 rounded-lg shadow-lg">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Maid Gender -->
+                        <div class="mb-4">
+                            <label for="maid-gender" class="block text-gray-700 mb-2 font-semibold" data-lang="maid_gender">Maid Gender</label>
+                            <select id="maid-gender" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 ring-green" required>
+                                <option value="female" data-lang="female">Female</option>
+                                <option value="male" data-lang="male">Male</option>
+                            </select>
+                        </div>
+
+                        <!-- Maid Age -->
+                        <div class="mb-4">
+                            <label for="maid-age" class="block text-gray-700 mb-2 font-semibold" data-lang="maid_age">Age</label>
+                            <input type="number" id="maid-age" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 ring-green" placeholder="e.g., 25" required>
+                        </div>
+                    </div>
+
+                    <!-- Task Category -->
+                    <div class="mb-6">
+                        <label class="block text-gray-700 mb-2 font-semibold" data-lang="task_category">Task Category</label>
+                        <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                            <div><label class="flex items-center"><input type="checkbox" name="maid-task" value="child-care" class="mr-2"> <span data-lang="child_care">Child Care</span></label></div>
+                            <div><label class="flex items-center"><input type="checkbox" name="maid-task" value="household" class="mr-2"> <span data-lang="household_tasks">Household Tasks</span></label></div>
+                            <div><label class="flex items-center"><input type="checkbox" name="maid-task" value="outdoor" class="mr-2"> <span data-lang="outdoor_tasks">Outdoor Tasks</span></label></div>
+                            <div><label class="flex items-center"><input type="checkbox" name="maid-task" value="elderly-care" class="mr-2"> <span data-lang="elderly_care">Elderly Care</span></label></div>
+                            <div><label class="flex items-center"><input type="checkbox" name="maid-task" value="pet-care" class="mr-2"> <span data-lang="pet_care">Pet Care</span></label></div>
+                            <div><label class="flex items-center"><input type="checkbox" name="maid-task" value="other" class="mr-2"> <span data-lang="other">Other</span></label></div>
+                        </div>
+                    </div>
+
+                    <!-- Other Task Description -->
+                    <div class="mb-4">
+                        <label for="other-task-description" class="block text-gray-700 mb-2 font-semibold" data-lang="other_task_description">If 'Other', please describe</label>
+                        <textarea id="other-task-description" rows="3" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 ring-green" placeholder="Describe specific tasks here..."></textarea>
+                    </div>
+
+                    <!-- Extra Requirements -->
+                    <div class="mb-6">
+                        <label for="extra-requirements" class="block text-gray-700 mb-2 font-semibold" data-lang="extra_requirements">Extra Tasks or Special Requirements (Optional)</label>
+                        <textarea id="extra-requirements" rows="3" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 ring-green" placeholder="Mention any other needs..."></textarea>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="w-full bg-red text-white font-semibold py-3 px-8 rounded-lg shadow-lg hover:bg-red-700 transition-colors" data-lang="submit_requirements">Submit Requirements</button>
+                </form>
             </div>
         </section>
 
