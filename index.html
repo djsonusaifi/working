@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bastiseva - Your Service Partner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --green: #22C55E;
+            --brand-red: #DC2626;
+            --color-background: #ffffff;
+            --color-text-primary: #4b5563; /* text-gray-800 */
+        }
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        .bg-primary {
+             background-color: var(--color-background);
+        }
+        .text-primary {
+            color: var(--color-text-primary);
+        }
+        .bg-green { background-color: var(--green); }
+        .text-green { color: var(--green); }
+        .border-green { border-color: var(--green); }
+        .ring-green { --tw-ring-color: var(--green); }
+        .bg-red { background-color: var(--brand-red); }
+        .hover\:bg-red-700:hover { background-color: #B91C1C; }
+
+        #chat-widget {
+            position: fixed;
+            bottom: 80px;
+            right: 20px;
+            z-index: 1000;
+        }
+        #chat-bubble {
+            width: 60px;
+            height: 60px;
+            background-color: var(--brand-red);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+        }
+        #chat-bubble:hover {
+            transform: scale(1.1);
+        }
+        #chat-window {
+            position: fixed;
+            bottom: 150px;
+            right: 20px;
+            width: 350px;
+            height: 500px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            transition: opacity 0.3s, transform 0.3s;
+            z-index: 1000;
+        }
+        #chat-header {
+            background-color: var(--brand-red);
+            color: white;
+            padding: 15px;
+            font-weight: bold;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #messages {
+            flex-grow: 1;
+            padding: 15px;
+            overflow-y: auto;
+            background-color: #f9f9f9;
+        }
+        #chat-input-container {
+            padding: 10px;
+            border-top: 1px solid #eee;
+            display: flex;
+        }
+        #chat-input {
+            flex-grow: 1;
+            border: 1px solid #ddd;
+            padding: 10px;
+            border-radius: 20px;
+            margin-right: 10px;
+        }
+        #send-button {
+            background-color: var(--brand-red);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+        }
+        .user-message, .bot-message {
+            margin-bottom: 10px;
+            padding: 10px 15px;
+            border-radius: 18px;
+            max-width: 80%;
+            word-wrap: break-word;
+        }
+        .user-message {
+            background-color: #DCF8C6;
+            align-self: flex-end;
+            margin-left: auto;
+        }
+        .bot-message {
+            background-color: #EAEAEA;
+            align-self: flex-start;
+        }
+
+        #splash-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 1;
+            transition: opacity 1s ease-in-out;
+        }
+
+        #splash-screen.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #splash-logo {
+            width: 150px;
+            height: 150px;
+            animation: zoomIn 1.5s ease-in-out forwards;
+        }
+
+        #splash-text {
+            font-size: 2rem;
+            margin-top: 20px;
+            animation: zoomIn 1.5s ease-in-out forwards;
+            animation-delay: 0.5s;
+            opacity: 0;
+        }
+
+        @keyframes zoomIn {
+            from {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body class="bg-primary text-primary">
+
+    <div id="welcome-animation">
+        <img src="logoi.png" alt="Bastiseva Logo">
+        <h1>Welcome to Bastiseva</h1>
+    </div>
+
+    <!-- Header -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <a href="#" class="flex items-center space-x-2">
+                <img src="logoi.png" alt="Bastiseva Logo" class="h-10">
+                <span class="text-2xl font-bold text-green">Bastiseva</span>
+            </a>
+            <div class="hidden md:flex space-x-6">
+                <a href="#home" class="text-gray-600 hover:text-green" data-lang="home">🏠 Home</a>
+                <a href="#services" class="text-gray-600 hover:text-green" data-lang="services">🛠️ Services</a>
+                <a href="#book-now" class="text-gray-600 hover:text-green" data-lang="book_now">📅 Book Now</a>
+                <a href="#join-us" class="text-gray-600 hover:text-green" data-lang="join_us">🤝 Join Us</a>
+                <a href="#contact" class="text-gray-600 hover:text-green" data-lang="contact">📞 Contact</a>
+                <a href="login.html" id="login-button" class="text-gray-600 hover:text-green" data-lang="login">👤 Login</a>
+                <div class="flex items-center space-x-2">
+                    <a href="#" class="text-sm font-medium text-gray-500 hover:text-green lang-button" data-lang-id="en">EN</a>
+                    <span class="text-gray-300">|</span>
+                    <a href="#" class="text-sm font-medium text-gray-500 hover:text-green lang-button" data-lang-id="hi">HI</a>
+                </div>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path></svg>
+            </button>
+        </nav>
+        <!-- Mobile Menu -->
+        <div id="mobile-menu" class="hidden md:hidden px-6 pb-4">
+            <a href="#home" class="block py-2 text-gray-600 hover:text-green" data-lang="home">🏠 Home</a>
+            <a href="#services" class="block py-2 text-gray-600 hover:text-green" data-lang="services">🛠️ Services</a>
+            <a href="#book-now" class="block py-2 text-gray-600 hover:text-green" data-lang="book_now">📅 Book Now</a>
+            <a href="#join-us" class="block py-2 text-gray-600 hover:text-green" data-lang="join_us">🤝 Join Us</a>
+            <a href="#contact" class="block py-2 text-gray-600 hover:text-green" data-lang="contact">📞 Contact</a>
+            <a href="login.html" id="mobile-login-button" class="block py-2 text-gray-600 hover:text-green" data-lang="login">👤 Login</a>
+            <div class="flex items-center space-x-2 mt-4">
+                <a href="#" class="text-sm font-medium text-gray-500 hover:text-green lang-button" data-lang-id="en">EN</a>
+                <span class="text-gray-300">|</span>
+                <a href="#" class="text-sm font-medium text-gray-500 hover:text-green lang-button" data-lang-id="hi">HI</a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="home" class="bg-gray-50 py-20">
+            <div class="container mx-auto px-6 text-left">
+                <h1 class="text-4xl md:text-6xl font-bold text-green" data-lang="hero_title">Your One-Stop Solution for Home Services</h1>
+                <p class="mt-4 text-lg text-gray-600" data-lang="hero_subtitle">Reliable, professional, and right at your doorstep.</p>
+                <button class="open-modal-button mt-8 bg-red text-white font-semibold py-3 px-8 rounded-lg shadow-lg hover:bg-red-700 transition-colors" data-lang="book_service">Book a Service</button>
+            </div>
+        </section>
+
+        <!-- Popular Services Section -->
+        <section id="services" class="py-20">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center mb-12" data-lang="popular_services">Our Popular Services</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                    <!-- Service Card -->
+                    <div class="bg-gray-50 rounded-xl shadow-lg p-6 text-center hover:shadow-2xl transition-shadow flex flex-col items-center">
+                        <i class="fas fa-broom text-green text-4xl mb-4"></i>
+                        <h3 class="text-xl font-semibold mb-4" data-lang="maid">Maid</h3>
+                        <button class="open-modal-button bg-green text-white py-2 px-4 rounded-lg hover:opacity-90 transition-opacity mt-auto">Book Now</button>
+                    </div>
+                    <div class="bg-gray-50 rounded-xl shadow-lg p-6 text-center hover:shadow-2xl transition-shadow flex flex-col items-center">
+                        <i class="fas fa-utensils text-green text-4xl mb-4"></i>
+                        <h3 class="text-xl font-semibold mb-4" data-lang="cook">Cook</h3>
+                        <button class="open-modal-button bg-green text-white py-2 px-4 rounded-lg hover:opacity-90 transition-opacity mt-auto">Book Now</button>
+                    </div>
+                    <div class="bg-gray-50 rounded-xl shadow-lg p-6 text-center hover:shadow-2xl transition-shadow flex flex-col items-center">
+                        <i class="fas fa-car text-green text-4xl mb-4"></i>
+                        <h3 class="text-xl font-semibold mb-4" data-lang="driver">Driver</h3>
+                        <button class="open-modal-button bg-green text-white py-2 px-4 rounded-lg hover:opacity-90 transition-opacity mt-auto">Book Now</button>
+                    </div>
+                    <div class="bg-gray-50 rounded-xl shadow-lg p-6 text-center hover:shadow-2xl transition-shadow flex flex-col items-center">
+                        <i class="fas fa-wrench text-green text-4xl mb-4"></i>
+                        <h3 class="text-xl font-semibold mb-4" data-lang="plumber">Plumber</h3>
+                        <button class="open-modal-button bg-green text-white py-2 px-4 rounded-lg hover:opacity-90 transition-opacity mt-auto">Book Now</button>
+                    </div>
+                    <div class="bg-gray-50 rounded-xl shadow-lg p-6 text-center hover:shadow-2xl transition-shadow flex flex-col items-center">
+                        <i class="fas fa-bolt text-green text-4xl mb-4"></i>
+                        <h3 class="text-xl font-semibold mb-4" data-lang="electrician">Electrician</h3>
+                        <button class="open-modal-button bg-green text-white py-2 px-4 rounded-lg hover:opacity-90 transition-opacity mt-auto">Book Now</button>
+                    </div>
+                    <div class="bg-gray-50 rounded-xl shadow-lg p-6 text-center hover:shadow-2xl transition-shadow flex flex-col items-center">
+                        <i class="fas fa-graduation-cap text-green text-4xl mb-4"></i>
+                        <h3 class="text-xl font-semibold mb-4" data-lang="tutor">Tutor</h3>
+                        <button class="open-modal-button bg-green text-white py-2 px-4 rounded-lg hover:opacity-90 transition-opacity mt-auto">Book Now</button>
+                    </div>
+                    <div class="bg-gray-50 rounded-xl shadow-lg p-6 text-center hover:shadow-2xl transition-shadow flex flex-col items-center">
+                        <i class="fas fa-bug text-green text-4xl mb-4"></i>
+                        <h3 class="text-xl font-semibold mb-4" data-lang="pest_control">Pest Control</h3>
+                        <button class="open-modal-button bg-green text-white py-2 px-4 rounded-lg hover:opacity-90 transition-opacity mt-auto">Book Now</button>
+                    </div>
+                    <div class="bg-gray-50 rounded-xl shadow-lg p-6 text-center hover:shadow-2xl transition-shadow flex flex-col items-center">
+                        <i class="fas fa-file-alt text-green text-4xl mb-4"></i>
+                        <h3 class="text-xl font-semibold mb-4" data-lang="document_help">Document Help</h3>
+                        <button class="open-modal-button bg-green text-white py-2 px-4 rounded-lg hover:opacity-90 transition-opacity mt-auto">Book Now</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Detailed Booking Section -->
+        <section id="book-now" class="bg-gray-50 py-20">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center mb-12" data-lang="book_your_service">Book Your Service</h2>
+                <form id="booking-form" class="max-w-lg mx-auto">
+                    <div class="mb-4">
+                        <label for="booking-name" class="block text-gray-700 mb-2">Name</label>
+                        <input type="text" id="booking-name" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 ring-green" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="booking-phone" class="block text-gray-700 mb-2">Phone</label>
+                        <input type="tel" id="booking-phone" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 ring-green" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="booking-address" class="block text-gray-700 mb-2">Address</label>
+                        <textarea id="booking-address" rows="3" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 ring-green" required></textarea>
+                    </div>
+                    <div class="mb-4">
+                        <label for="booking-service" class="block text-gray-700 mb-2">Service Type</label>
+                        <select id="booking-service" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 ring-green" required>
+                            <option>Maid</option>
+                            <option>Cook</option>
+                            <option>Driver</option>
+                            <option>Plumber</option>
+                            <option>Electrician</option>
+                            <option>Tutor</option>
+                            <option>Pest Control</option>
+                            <option>Document Help</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="booking-datetime" class="block text-gray-700 mb-2">Date & Time</label>
+                        <input type="datetime-local" id="booking-datetime" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 ring-green" required>
+                    </div>
+                    <button type="submit" class="w-full bg-red text-white font-semibold py-3 px-8 rounded-lg shadow-lg hover:bg-red-700 transition-colors">Book via WhatsApp</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Join as Professional Section -->
+        <section id="join-us" class="py-20">
+            <div class="container mx-auto px-6">
+                <h2 class="text-3xl font-bold text-center mb-12" data-lang="join_our_team">Join Our Team of Professionals</h2>
+                <form id="join-form" class="max-w-lg mx-auto">
+                    <div class="mb-4">
+                        <label for="join-name" class="block text-gray-700 mb-2">Name</label>
+                        <input type="text" id="join-name" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 ring-green" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="join-service" class="block text-gray-700 mb-2">Service You Provide</label>
+                        <select id="join-service" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 ring-green" required>
+                            <option>Maid</option>
+                            <option>Cook</option>
+                            <option>Driver</option>
+                            <option>Plumber</option>
+                            <option>Electrician</option>
+                            <option>Tutor</option>
+                            <option>Pest Control</option>
+                            <option>Document Help</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label for="join-phone" class="block text-gray-700 mb-2">Phone</label>
+                        <input type="tel" id="join-phone" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 ring-green" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="join-id" class="block text-gray-700 mb-2">ID Proof (e.g., Aadhaar)</label>
+                        <input type="file" id="join-id" class="w-full p-2 border border-gray-300 rounded-md">
+                        <p class="text-sm text-gray-500 mt-1">Note: File upload is for UI only. Details will be sent via text.</p>
+                    </div>
+                    <button type="submit" class="w-full bg-green text-white font-semibold py-3 px-8 rounded-lg shadow-lg hover:opacity-90 transition-opacity">Register via WhatsApp</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer id="contact" class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-6 grid md:grid-cols-3 gap-8">
+            <div>
+                <h3 class="text-xl font-bold mb-4" data-lang="about_bastiseva">About Bastiseva</h3>
+                <p class="text-gray-400" data-lang="about_text">We connect you with reliable and skilled professionals for all your home service needs. Quality, trust, and convenience are our priorities.</p>
+            </div>
+            <div>
+                <h3 class="text-xl font-bold mb-4" data-lang="contact_us">Contact Us</h3>
+                <p class="text-gray-400">Mohalla Kot, Bugrasi, Bulandshahr, 203403</p>
+                <p class="text-gray-400">Email: contact@bastiseva.com</p>
+                <p class="text-gray-400">Phone: +91 7895191482</p>
+            </div>
+            <div>
+                <h3 class="text-xl font-bold mb-4" data-lang="follow_us">Follow Us</h3>
+                <div class="flex space-x-4">
+                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook text-2xl"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter text-2xl"></i></a>
+                    <a href="https://www.instagram.com/bastiseva?igsh=ZWpxYnU5YTJqYTFp" target="_blank" class="text-gray-400 hover:text-white"><i class="fab fa-instagram text-2xl"></i></a>
+                </div>
+                <div class="mt-4">
+                    <a href="privacy.html" target="_blank" class="text-gray-400 hover:text-white" data-lang="privacy_policy_en">Privacy Policy (EN)</a> |
+                    <a href="privacy_hi.html" target="_blank" class="text-gray-400 hover:text-white" data-lang="privacy_policy_hi">Privacy Policy (HI)</a> |
+                    <a href="terms.html" target="_blank" class="text-gray-400 hover:text-white" data-lang="terms_of_service">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div class="text-center py-4">
+        <button id="open-dev-modal-button" class="bg-green text-white font-semibold py-2 px-6 rounded-lg shadow-md hover:opacity-90 transition-colors" data-lang="developer_button">Developer And Design Md Sonu Saifi Bugrasi</button>
+    </div>
+
+    <!-- Developer Details Modal -->
+    <div id="dev-details-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white p-8 rounded-lg shadow-xl w-11/12 md:w-1/3 max-w-sm mx-auto">
+            <div class="flex justify-end">
+                <button id="close-dev-modal-button" class="text-2xl">&times;</button>
+            </div>
+            <div class="text-center">
+                <img src="profile.jpg" alt="Developer Profile Picture" class="w-32 h-32 rounded-full mx-auto mb-4 border-4 border-green-500">
+                <h3 class="text-2xl font-bold text-gray-800">Md Sonu Saifi</h3>
+                <p class="text-gray-500">Full Stack Developer</p>
+                <div class="space-y-4 text-left text-blue-600 mt-6">
+                    <a href="https://www.instagram.com/svd_star_edit?igsh=NDhrczhobWx1ZWJw" target="_blank" class="flex items-center hover:underline"><i class="fab fa-instagram mr-3 text-xl"></i> 📸 Instagram</a>
+                    <a href="https://x.com/FirstHumaniti?s=09" target="_blank" class="flex items-center hover:underline"><i class="fab fa-twitter mr-3 text-xl"></i> 🐦 X Account</a>
+                    <a href="https://wa.me/+918265999762" target="_blank" class="flex items-center hover:underline"><i class="fab fa-whatsapp mr-3 text-xl"></i> 💬 WhatsApp</a>
+                    <p class="flex items-center text-gray-700"><i class="fas fa-phone mr-3 text-xl"></i> 📞 +91 8265999762</p>
+                </div>
+                <p class="mt-6 text-gray-700"><b>Please contact for website, Android, and iOS application development.</b></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Booking Modal -->
+    <div id="booking-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white p-8 rounded-lg shadow-xl w-11/12 md:w-1/3">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-2xl font-bold">Quick Booking</h2>
+                <button id="close-modal-button" class="text-2xl">&times;</button>
+            </div>
+            <form id="modal-booking-form">
+                <div class="mb-4">
+                    <label for="modal-name" class="block text-gray-700 mb-2">Name</label>
+                    <input type="text" id="modal-name" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 ring-green" required>
+                </div>
+                <div class="mb-4">
+                    <label for="modal-phone" class="block text-gray-700 mb-2">Phone</label>
+                    <input type="tel" id="modal-phone" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 ring-green" required>
+                </div>
+                <div class="mb-4">
+                    <label for="modal-address" class="block text-gray-700 mb-2">Address</label>
+                    <textarea id="modal-address" rows="2" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 ring-green" required></textarea>
+                </div>
+                <div class="mb-4">
+                    <label for="modal-service" class="block text-gray-700 mb-2">Service Type</label>
+                    <select id="modal-service" class="w-full p-3 border border-gray-300 rounded-md focus:ring-2 ring-green" required>
+                        <option>Maid</option>
+                        <option>Cook</option>
+                        <option>Driver</option>
+                        <option>Plumber</option>
+                        <option>Electrician</option>
+                        <option>Tutor</option>
+                        <option>Pest Control</option>
+                        <option>Document Help</option>
+                    </select>
+                </div>
+                <button type="submit" class="w-full bg-red text-white font-semibold py-3 px-8 rounded-lg shadow-lg hover:bg-red-700 transition-colors">Submit & Chat on WhatsApp</button>
+            </form>
+        </div>
+    </div>
+
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const WHATSAPP_NUMBER = '+917895191482';
+
+            // Mobile Menu
+            const mobileMenuButton = document.getElementById('mobile-menu-button');
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenu.classList.toggle('hidden');
+            });
+
+            // Modal
+            const bookingModal = document.getElementById('booking-modal');
+            const openModalButtons = document.querySelectorAll('.open-modal-button');
+            const closeModalButton = document.getElementById('close-modal-button');
+
+            openModalButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    bookingModal.classList.remove('hidden');
+                });
+            });
+
+            closeModalButton.addEventListener('click', () => {
+                bookingModal.classList.add('hidden');
+            });
+            
+            bookingModal.addEventListener('click', (e) => {
+                if (e.target === bookingModal) {
+                    bookingModal.classList.add('hidden');
+                }
+            });
+
+            // Developer Details Modal
+            const devDetailsModal = document.getElementById('dev-details-modal');
+            const openDevModalButton = document.getElementById('open-dev-modal-button');
+            const closeDevModalButton = document.getElementById('close-dev-modal-button');
+
+            openDevModalButton.addEventListener('click', () => {
+                devDetailsModal.classList.remove('hidden');
+            });
+
+            closeDevModalButton.addEventListener('click', () => {
+                devDetailsModal.classList.add('hidden');
+            });
+
+            devDetailsModal.addEventListener('click', (e) => {
+                if (e.target === devDetailsModal) {
+                    devDetailsModal.classList.add('hidden');
+                }
+            });
+
+            // WhatsApp Form Handlers
+            const handleBooking = (formId, nameId, phoneId, addressId, serviceId, datetimeId) => {
+                const form = document.getElementById(formId);
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const name = document.getElementById(nameId).value;
+                    const phone = document.getElementById(phoneId).value;
+                    const address = document.getElementById(addressId).value;
+                    const service = document.getElementById(serviceId).value;
+                    const datetime = datetimeId ? document.getElementById(datetimeId).value : new Date().toLocaleString();
+
+                    const message = `*New Service Booking*\n\n*Name:* ${name}\n*Phone:* ${phone}\n*Address:* ${address}\n*Service:* ${service}\n*Date/Time:* ${datetime}`;
+                    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+                    window.open(whatsappUrl, '_blank');
+                });
+            };
+
+            const handleJoin = (formId, nameId, serviceId, phoneId) => {
+                const form = document.getElementById(formId);
+                form.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const name = document.getElementById(nameId).value;
+                    const service = document.getElementById(serviceId).value;
+                    const phone = document.getElementById(phoneId).value;
+
+                    const message = `*New Partner Registration*\n\n*Name:* ${name}\n*Service:* ${service}\n*Phone:* ${phone}`;
+                    const whatsappUrl = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(message)}`;
+                    window.open(whatsappUrl, '_blank');
+                });
+            };
+
+            // Initialize form handlers
+            handleBooking('booking-form', 'booking-name', 'booking-phone', 'booking-address', 'booking-service', 'booking-datetime');
+            handleBooking('modal-booking-form', 'modal-name', 'modal-phone', 'modal-address', 'modal-service', null);
+            handleJoin('join-form', 'join-name', 'join-service', 'join-phone');
+
+
+            const splashScreen = document.getElementById('splash-screen');
+            window.addEventListener('load', () => {
+                setTimeout(() => {
+                    splashScreen.style.opacity = '0';
+                    setTimeout(() => {
+                        splashScreen.classList.add('hidden');
+                    }, 1000);
+                }, 3000);
+            });
+        });
+    </script>
+    <script src="script.js"></script>
+    <script src="auth.js"></script>
+    <script src="lang.js"></script>
+</body>
+</html>

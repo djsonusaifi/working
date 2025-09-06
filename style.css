@@ -1,0 +1,36 @@
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+}
+
+#welcome-animation {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: red;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    opacity: 1;
+    transition: opacity 1s ease-out;
+}
+
+#welcome-animation.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+#welcome-animation img {
+    max-width: 200px; /* Medium size logo */
+    margin-bottom: 20px;
+}
+
+#welcome-animation h1 {
+    color: green;
+    font-size: 2em;
+}
