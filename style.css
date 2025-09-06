@@ -41,6 +41,33 @@ header {
 }
 
 header a, header span {
-    color: lightgreen !important;
-    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+    color: green !important;
+    text-shadow: none;
+}
+
+.emoji {
+    display: inline-block;
+    animation: wobble 1.5s infinite;
+}
+
+@keyframes wobble {
+    0%, 100% {
+        transform: translateX(0%);
+        transform-origin: 50% 50%;
+    }
+    15% {
+        transform: translateX(-8px) rotate(-6deg);
+    }
+    30% {
+        transform: translateX(6px) rotate(6deg);
+    }
+    45% {
+        transform: translateX(-6px) rotate(-3.6deg);
+    }
+    60% {
+        transform: translateX(4px) rotate(2.4deg);
+    }
+    75% {
+        transform: translateX(-2px) rotate(-1.2deg);
+    }
 }
