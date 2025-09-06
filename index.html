@@ -203,6 +203,7 @@
                 <a href="#join-us" class="text-gray-600 hover:text-green" data-lang="join_us"><span class="emoji">🤝</span> Join Us</a>
                 <a href="#contact" class="text-gray-600 hover:text-green" data-lang="contact"><span class="emoji">📞</span> Contact</a>
                 <a href="login.html" id="login-button" class="text-gray-600 hover:text-green" data-lang="login"><span class="emoji">👤</span> Login</a>
+                <button id="open-download-modal-button" class="bg-green text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:opacity-90 transition-colors" data-lang="download_app">Download App</button>
                 <div class="flex items-center space-x-2">
                     <a href="#" class="text-sm font-medium text-gray-500 hover:text-green lang-button" data-lang-id="en">EN</a>
                     <span class="text-gray-300">|</span>
@@ -221,6 +222,7 @@
             <a href="#join-us" class="block py-2 text-gray-600 hover:text-green" data-lang="join_us"><span class="emoji">🤝</span> Join Us</a>
             <a href="#contact" class="block py-2 text-gray-600 hover:text-green" data-lang="contact"><span class="emoji">📞</span> Contact</a>
             <a href="login.html" id="mobile-login-button" class="block py-2 text-gray-600 hover:text-green" data-lang="login"><span class="emoji">👤</span> Login</a>
+            <button id="mobile-open-download-modal-button" class="w-full mt-4 bg-green text-white font-semibold py-2 px-4 rounded-lg shadow-md hover:opacity-90 transition-colors" data-lang="download_app">Download App</button>
             <div class="flex items-center space-x-2 mt-4">
                 <a href="#" class="text-sm font-medium text-gray-500 hover:text-green lang-button" data-lang-id="en">EN</a>
                 <span class="text-gray-300">|</span>
@@ -459,7 +461,21 @@
 
 
 
-    <script>
+   <!-- Download App Modal -->
+   <div id="download-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+       <div class="bg-white p-8 rounded-lg shadow-xl w-11/12 md:w-1/3 max-w-sm mx-auto text-center">
+           <div class="flex justify-end">
+               <button id="close-download-modal-button" class="text-2xl">&times;</button>
+           </div>
+           <h2 class="text-2xl font-bold mb-6" data-lang="download_our_app">Download Our App</h2>
+           <div class="space-y-4">
+               <a href="#" id="android-download-link" class="block bg-green text-white font-semibold py-3 px-8 rounded-lg shadow-lg hover:opacity-90 transition-opacity"><i class="fab fa-android mr-2"></i> Android App</a>
+               <a href="#" id="ios-download-link" class="block bg-gray-800 text-white font-semibold py-3 px-8 rounded-lg shadow-lg hover:opacity-90 transition-opacity"><i class="fab fa-apple mr-2"></i> iOS App</a>
+           </div>
+       </div>
+   </div>
+
+   <script>
         document.addEventListener('DOMContentLoaded', () => {
             const WHATSAPP_NUMBER = '+917895191482';
 
@@ -509,6 +525,43 @@
                     devDetailsModal.classList.add('hidden');
                 }
             });
+
+           // Download App Modal
+           const downloadModal = document.getElementById('download-modal');
+           const openDownloadModalButton = document.getElementById('open-download-modal-button');
+           const mobileOpenDownloadModalButton = document.getElementById('mobile-open-download-modal-button');
+           const closeDownloadModalButton = document.getElementById('close-download-modal-button');
+           const androidDownloadLink = document.getElementById('android-download-link');
+           const iosDownloadLink = document.getElementById('ios-download-link');
+
+           openDownloadModalButton.addEventListener('click', () => {
+               downloadModal.classList.remove('hidden');
+           });
+
+           mobileOpenDownloadModalButton.addEventListener('click', () => {
+               downloadModal.classList.remove('hidden');
+           });
+
+           closeDownloadModalButton.addEventListener('click', () => {
+               downloadModal.classList.add('hidden');
+           });
+
+           downloadModal.addEventListener('click', (e) => {
+               if (e.target === downloadModal) {
+                   downloadModal.classList.add('hidden');
+               }
+           });
+
+           // TODO: Replace with actual app store links
+           androidDownloadLink.addEventListener('click', (e) => {
+               e.preventDefault();
+               alert('Android app coming soon!');
+           });
+
+           iosDownloadLink.addEventListener('click', (e) => {
+               e.preventDefault();
+               alert('iOS app coming soon!');
+           });
 
             // WhatsApp Form Handlers
             const handleBooking = (formId, nameId, phoneId, addressId, serviceId, datetimeId) => {
