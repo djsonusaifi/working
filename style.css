@@ -42,7 +42,7 @@ header {
 
 header a, header span {
     color: green !important;
-    text-shadow: none;
+    text-shadow: none !important;
 }
 
 .emoji {
